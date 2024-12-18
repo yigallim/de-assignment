@@ -4,7 +4,8 @@ class DefinitionExampleEntry:
         self.examples = examples
 
     def __repr__(self):
-        return f"DefinitionExampleEntry(meaning={self.meaning!r}, examples={self.examples!r})"
+        examples_repr = "\n  ".join(self.examples) if self.examples else "None"
+        return f"DefinitionExampleEntry(\n  meaning={self.meaning!r},\n  examples=[\n  {examples_repr}\n  ]\n)"
 
     def add_example(self, example: str):
         self.examples.append(example)

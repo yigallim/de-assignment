@@ -38,6 +38,20 @@ class PRPMCache:
     def get_word_count(self):
         return self.redis_client.hlen(self.hash_name)
 
+    def get_words_with_content(self):
+        all_words = self.redis_client.hgetall(self.hash_name)
+        return {word: content for word, content in all_words.items() if content.strip()}
+
+    def get_words_without_content(self):
+        all_words = self.redis_client.hgetall(self.hash_name)
+        return [word for word, content in all_words.items() if not content.strip()]
+
+    def is_malay(self, word):
+        if not self.redis_client.hexists(self.hash_name, word):
+            return False
+        content = self.redis_client.hget(self.hash_name, word)
+        return bool(content.strip()) if content else False
+    
     def __repr__(self):
         word_pages = self.get_all_word_pages()
         if not word_pages:
